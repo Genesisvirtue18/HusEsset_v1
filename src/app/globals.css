@@ -1,0 +1,315 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #fff2f1;
+  --color-brand-100: #ffe0dd;
+  --color-brand-200: #ffc4bf;
+  --color-brand-300: #ff9b93;
+  --color-brand-400: #fa6659;
+  --color-brand-500: #ef3a2b;
+  --color-brand-600: #dc2117;
+  --color-brand-700: #b81812;
+  --color-brand-800: #971814;
+  --color-brand-900: #7d1a17;
+
+  --color-ink-50: #f6f6f5;
+  --color-ink-100: #e7e7e5;
+  --color-ink-200: #cfd0cd;
+  --color-ink-300: #adaeaa;
+  --color-ink-400: #83857f;
+  --color-ink-500: #676963;
+  --color-ink-600: #52544f;
+  --color-ink-700: #434440;
+  --color-ink-800: #2a2b28;
+  --color-ink-900: #171816;
+  --color-ink-950: #0d0e0d;
+
+  --color-sand-50: #faf8f5;
+  --color-sand-100: #f3efe8;
+  --color-sand-200: #e7dfd2;
+
+  --font-display: "Inter", "Segoe UI", ui-sans-serif, system-ui, -apple-system,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-sans: "Inter", "Segoe UI", ui-sans-serif, system-ui, -apple-system,
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+:root {
+  --radius-frame: 28px;
+  --font-display: "Inter", "Segoe UI", ui-sans-serif, system-ui, -apple-system,
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── Rich page background ── */
+body {
+  color: var(--color-ink-900);
+  -webkit-font-smoothing: antialiased;
+  /* layered: noise grain + warm radial gradient + base */
+  background-color: #f7f4ef;
+  background-image:
+    /* subtle noise grain */
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"),
+    /* top-right warm bloom */
+    radial-gradient(ellipse 80% 60% at 100% 0%, rgba(220,33,23,0.07) 0%, transparent 60%),
+    /* left-center cool warm */
+    radial-gradient(ellipse 60% 50% at 0% 50%, rgba(183,120,70,0.06) 0%, transparent 55%),
+    /* bottom warm glow */
+    radial-gradient(ellipse 70% 40% at 50% 100%, rgba(220,33,23,0.05) 0%, transparent 60%),
+    /* base warm linen */
+    linear-gradient(160deg, #faf8f5 0%, #f3ede4 50%, #f7f3ee 100%);
+}
+
+/* ── Outframe cards ── */
+.outframe {
+  position: relative;
+  border-radius: var(--radius-frame);
+  background: #fff;
+  border: 1px solid rgba(23, 24, 22, 0.08);
+  box-shadow:
+    0 1px 2px rgba(23, 24, 22, 0.04),
+    0 18px 40px -28px rgba(23, 24, 22, 0.35);
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.4s ease;
+}
+
+.outframe-hover:hover {
+  transform: translateY(-7px) scale(1.008);
+  border-color: rgba(220, 33, 23, 0.3);
+  box-shadow:
+    0 1px 2px rgba(23, 24, 22, 0.05),
+    0 40px 70px -32px rgba(151, 24, 20, 0.5),
+    0 0 0 1px rgba(220, 33, 23, 0.08);
+}
+
+/* ghost offset frame */
+.outframe-offset::before {
+  content: "";
+  position: absolute;
+  inset: 14px -14px -14px 14px;
+  border-radius: var(--radius-frame);
+  border: 1.5px solid rgba(220, 33, 23, 0.3);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.frame-ticks::after {
+  content: "";
+  position: absolute;
+  inset: -9px;
+  border-radius: calc(var(--radius-frame) + 9px);
+  border: 1px dashed rgba(23, 24, 22, 0.14);
+  pointer-events: none;
+}
+
+/* ── Grid / texture overlays ── */
+.grid-lines {
+  background-image:
+    linear-gradient(to right, rgba(23, 24, 22, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(23, 24, 22, 0.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.grid-lines-light {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* subtle dot-pattern */
+.dot-pattern {
+  background-image: radial-gradient(circle, rgba(23,24,22,0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* ── Reveal animations ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-32px);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-left.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(32px);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-right.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.94);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-scale.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ── Floating orb animations ── */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+  33%       { transform: translateY(-22px) translateX(12px) scale(1.04); }
+  66%       { transform: translateY(12px) translateX(-8px) scale(0.97); }
+}
+@keyframes float-medium {
+  0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+  40%       { transform: translateY(18px) translateX(-14px) scale(1.06); }
+  75%       { transform: translateY(-10px) translateX(10px) scale(0.96); }
+}
+@keyframes float-fast {
+  0%, 100% { transform: translateY(0px) translateX(0px); }
+  50%       { transform: translateY(-16px) translateX(8px); }
+}
+
+.orb-slow   { animation: float-slow   9s ease-in-out infinite; }
+.orb-medium { animation: float-medium 7s ease-in-out infinite; }
+.orb-fast   { animation: float-fast   5s ease-in-out infinite; }
+
+/* ── Pulse beacon (CTA button) ── */
+@keyframes beacon {
+  0%   { box-shadow: 0 0 0 0 rgba(220,33,23,0.55); }
+  60%  { box-shadow: 0 0 0 14px rgba(220,33,23,0); }
+  100% { box-shadow: 0 0 0 0 rgba(220,33,23,0); }
+}
+.btn-beacon {
+  animation: beacon 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ── Aurora sweep ── */
+@keyframes aurora {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.aurora-bg {
+  background: linear-gradient(
+    -45deg,
+    #1a0a0a,
+    #0d0e0d,
+    #1c0804,
+    #0d0e0d,
+    #200c09,
+    #0d0e0d
+  );
+  background-size: 400% 400%;
+  animation: aurora 18s ease infinite;
+}
+
+/* ── Shimmer on stat numbers ── */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    #dc2117 0%,
+    #fa6659 40%,
+    #dc2117 60%,
+    #b81812 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s linear infinite;
+}
+
+/* ── Marquee ── */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ── Glow card inner light ── */
+.glow-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at var(--mx, 50%) var(--my, 50%),
+    rgba(220, 33, 23, 0.08) 0%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.glow-card:hover::after {
+  opacity: 1;
+}
+
+/* ── Spin slow ── */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.spin-slow { animation: spin-slow 40s linear infinite; }
+
+/* ── Count-up highlight ── */
+.count-up-done {
+  animation: pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+/* ── Wood-grain stripe accent ── */
+.wood-stripe {
+  background-image: repeating-linear-gradient(
+    102deg,
+    transparent 0px,
+    transparent 18px,
+    rgba(183,120,70,0.035) 18px,
+    rgba(183,120,70,0.035) 19px
+  );
+}
+
+::selection {
+  background: var(--color-brand-600);
+  color: #fff;
+}
+
+input, textarea, select { font: inherit; }
+
+.text-balance { text-wrap: balance; }
